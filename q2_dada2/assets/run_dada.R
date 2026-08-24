@@ -380,7 +380,7 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
   cat("4) Denoise samples ")
   cat("\n")
   for(j in seq(length(filts))) {
-    drp <- derepFastq(filts[[j]])
+    drp <- derepFastq(filts[[j]], qualityType='FastqQuality')
     dds[[j]] <- dada(drp, err=err, multithread=multithread,HOMOPOLYMER_GAP_PENALTY=HOMOPOLYMER_GAP_PENALTY,
                      BAND_SIZE=BAND_SIZE, verbose=FALSE)
     cat(".")
@@ -397,7 +397,7 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
     ### \pseudo_priors code copied from dada2.R
     ### code copied from previous loop through samples in this script
     for(j in seq(length(filts))) {
-      drp <- derepFastq(filts[[j]])
+      drp <- derepFastq(filts[[j]], qualityType='FastqQuality')
       dds[[j]] <- dada(drp, err=err, multithread=multithread,
                        priors=pseudo_priors, HOMOPOLYMER_GAP_PENALTY=HOMOPOLYMER_GAP_PENALTY,
                        BAND_SIZE=BAND_SIZE, verbose=FALSE)
@@ -416,9 +416,9 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
   cat("3) Denoise samples ")
 
   for(j in seq(length(filts))) {
-    drpF <- derepFastq(filts[[j]])
+    drpF <- derepFastq(filts[[j]], qualityType='FastqQuality')
     ddsF[[j]] <- dada(drpF, err=err, multithread=multithread, verbose=FALSE)
-    drpR <- derepFastq(filtsR[[j]])
+    drpR <- derepFastq(filtsR[[j]], qualityType='FastqQuality')
     ddsR[[j]] <- dada(drpR, err=errR, multithread=multithread, verbose=FALSE)
     cat(".")
   }
@@ -437,10 +437,10 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
     ### \pseudo_priors code copied from dada2.R
     ### code copied from previous loop through samples in this script
     for(j in seq(length(filts))) {
-      drpF <- derepFastq(filts[[j]])
+      drpF <- derepFastq(filts[[j]], qualityType='FastqQuality')
       ddsF[[j]] <- dada(drpF, err=err, priors=pseudo_priorsF,
                         multithread=multithread, verbose=FALSE)
-      drpR <- derepFastq(filtsR[[j]])
+      drpR <- derepFastq(filtsR[[j]], qualityType='FastqQuality')
       ddsR[[j]] <- dada(drpR, err=errR, priors=pseudo_priorsR,
                         multithread=multithread, verbose=FALSE)
       cat(".")
@@ -451,8 +451,8 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
 
   ### Now loop through and do merging
   for(j in seq(length(filts))) {
-    drpF <- derepFastq(filts[[j]])
-    drpR <- derepFastq(filtsR[[j]])
+    drpF <- derepFastq(filts[[j]], qualityType='FastqQuality')
+    drpR <- derepFastq(filtsR[[j]], qualityType='FastqQuality')
     mergers[[j]] <- mergePairs(ddsF[[j]], drpF, ddsR[[j]], drpR, minOverlap=minOverlap)
     denoisedF[[j]] <- getN(ddsF[[j]])
     cat(".")

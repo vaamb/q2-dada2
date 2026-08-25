@@ -542,6 +542,7 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
   }
 
   ### Now loop through and do merging
+  cat("Merge sequences")
   for(j in seq(length(filts))) {
     drpF <- derepFastq(filts[[j]], qualityType='FastqQuality')
     drpR <- derepFastq(filtsR[[j]], qualityType='FastqQuality')

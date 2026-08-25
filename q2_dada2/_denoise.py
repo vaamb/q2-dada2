@@ -300,7 +300,8 @@ def denoise_paired(demultiplexed_seqs: SingleLanePerSamplePairedEndFastqDirFmt,
                    allow_one_off: bool = False,
                    n_threads: int = 1, n_reads_learn: int = 1000000,
                    hashed_feature_ids: bool = True,
-                   retain_all_samples: bool = True
+                   retain_all_samples: bool = True,
+                   just_concatenate: bool = False,
                    ) -> (biom.Table, DNAIterator,
                          qiime2.Metadata, qiime2.Metadata):
     _check_inputs(**locals())
@@ -357,7 +358,9 @@ def denoise_paired(demultiplexed_seqs: SingleLanePerSamplePairedEndFastqDirFmt,
                '--min_parental_fold', str(min_fold_parent_over_abundance),
                '--allow_one_off', str(allow_one_off),
                '--num_threads', str(n_threads),
-               '--learn_min_reads', str(n_reads_learn)]
+               '--learn_min_reads', str(n_reads_learn),
+               '--just_concatenate', str(just_concatenate),
+               ]
         try:
             run_commands([cmd])
         except subprocess.CalledProcessError as e:

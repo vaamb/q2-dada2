@@ -208,7 +208,9 @@ option_list = list(
   make_option(c("--homopolymer_gap_penalty"), action="store", default='NULL', type='character',
               help="The cost of gaps in homopolymer regions (>=3 repeated bases).Default is NULL, which causes homopolymer gaps to be treated as normal gaps."),
   make_option(c("--band_size"), action="store", default='NULL', type='character',
-              help="When set, banded Needleman-Wunsch alignments are performed.")
+              help="When set, banded Needleman-Wunsch alignments are performed."),
+  make_option(c("--just_concatenate"), action="store", default='NULL', type='character',
+              help="When set, concatenate the forward and reverse sequences. Instead of merging them.")
 )
 opt = parse_args(OptionParser(option_list=option_list))
 
@@ -255,6 +257,7 @@ if (opt$homopolymer_gap_penalty=='NULL'){
   }
 }
 BAND_SIZE <- if(opt$band_size=='NULL') NULL else as.integer(opt$band_size)
+justConcatenate <- if(opt$just_concatenate=='NULL') FALSE else as.logical(opt$just_concatenate)
 
 ### VALIDATE ARGUMENTS ###
 # Input directory is expected to contain .fastq.gz file(s)
@@ -550,7 +553,8 @@ if(inp.dirR =='NULL'){#for CCS/sinlge/pyro read analysis
       ddsF[[j]], drpF, ddsR[[j]], drpR,
       minOverlap=minOverlap,
       maxMismatch=maxMergeMismatch,
-      trimOverhang=trimOverhang
+      trimOverhang=trimOverhang,
+      justConcatenate=justConcatenate
       )
     denoisedF[[j]] <- getN(ddsF[[j]])
     cat(".")

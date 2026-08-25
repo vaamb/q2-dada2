@@ -79,6 +79,7 @@ _valid_inputs = {
     'front': _SKIP,
     'adapter': _SKIP,
     'indels': _SKIP,
+    'just_concatenate': _BOOLEAN,
 }
 
 

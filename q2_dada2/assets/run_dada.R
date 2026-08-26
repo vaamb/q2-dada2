@@ -414,7 +414,8 @@ if(primer.removed.dir!='NULL'){ #for CCS read analysis
   filts <- file.path(filtered.dir, basename(nop))
   out <- suppressWarnings(filterAndTrim(nop, filts, truncLen = truncLen, trimLeft = trimLeft,
                                         maxEE = maxEE, truncQ = truncQ, rm.phix = FALSE,
-                                        multithread = multithread, maxLen = maxLen, minLen = minLen, minQ = 3))
+                                        multithread = multithread, maxLen = maxLen, minLen = minLen, minQ = 3,
+                                        qualityType='FastqQuality'))
 }else{
   filts <- file.path(filtered.dir, basename(unfilts))
   if(inp.dirR!='NULL'){#for paired read analysis
@@ -422,11 +423,11 @@ if(primer.removed.dir!='NULL'){ #for CCS read analysis
     out <- suppressWarnings(filterAndTrim(unfilts, filts, unfiltsR, filtsR,
                                           truncLen=c(truncLen, truncLenR), trimLeft=c(trimLeft, trimLeftR),
                                           maxEE=c(maxEE, maxEER), truncQ=truncQ, rm.phix=TRUE,
-                                          multithread=multithread))
+                                          multithread=multithread, qualityType='FastqQuality'))
   }else{#for sinlge/pyro read analysis
     out <- suppressWarnings(filterAndTrim(unfilts, filts, truncLen=truncLen, trimLeft=trimLeft,
                                           maxEE=maxEE, truncQ=truncQ, rm.phix=TRUE,
-                                          multithread=multithread, maxLen=maxLen))
+                                          multithread=multithread, maxLen=maxLen, qualityType='FastqQuality'))
   }
 }
 
@@ -447,13 +448,16 @@ cat("3) Learning Error Rates\n")
 if(primer.removed.dir!='NULL'){#for CCS read analysis
   err <- suppressWarnings(learnErrors(filts, nreads=nreads.learn,
                                       errorEstimationFunction=dada2:::PacBioErrfun,
-                                      multithread=multithread, BAND_SIZE=BAND_SIZE))
+                                      multithread=multithread, BAND_SIZE=BAND_SIZE,
+                                      qualityType='FastqQuality'))
   com_err_df <- internal_plotErrors(err)
 
 }else if(inp.dirR!='NULL'){#for paired read analysis
 
-  err <- suppressWarnings(learnErrors(filts, nreads=nreads.learn, multithread=multithread))
-  errR <- suppressWarnings(learnErrors(filtsR, nreads=nreads.learn, multithread=multithread))
+  err <- suppressWarnings(learnErrors(filts, nreads=nreads.learn, multithread=multithread,
+                                      qualityType='FastqQuality'))
+  errR <- suppressWarnings(learnErrors(filtsR, nreads=nreads.learn, multithread=multithread,
+                                       qualityType='FastqQuality'))
 
   err_plot_df_F <- internal_plotErrors(err)
   colnames(err_plot_df_F) <- paste0("F_", colnames(err_plot_df_F))
